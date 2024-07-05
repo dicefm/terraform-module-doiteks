@@ -11,12 +11,14 @@ variable "clustername" {}
 data "aws_eks_cluster" "this" {
   name = var.clustername
 }
+data "aws_eks_cluster_auth" "this" {
+  name = var.clustername
+}
 
 provider "kubernetes" {
-  alias                  = var.clustername
-  host                   = data.aws_eks_cluster.this.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.this.certificate_authority.0.data)
-  token                  = data.aws_eks_cluster_auth.this.token
+  host                    = data.aws_eks_cluster.this.endpoint
+  cluster_ca_certificate  = data.aws_eks_cluster.this.certificate_authority[0].data
+  token                   = data.aws_eks_cluster_auth.this.token
 }
 
 # #########
