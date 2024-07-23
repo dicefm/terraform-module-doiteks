@@ -5,18 +5,16 @@ provider "aws" {
   region  = var.region
 }
 
-variable "clustername" {}
-
 data "aws_eks_cluster" "this" {
-  name = var.clustername
+  name = var.cluster.name
 }
 data "aws_eks_cluster_auth" "this" {
-  name = var.clustername
+  name = var.cluster.name
 }
 
 provider "kubernetes" {
   host                    = data.aws_eks_cluster.this.endpoint
-  cluster_ca_certificate  = data.aws_eks_cluster.this.certificate_authority[0].data
+  cluster_ca_certificate  = var.kubeconfig-certificate-authority-data
   token                   = data.aws_eks_cluster_auth.this.token
 }
 
