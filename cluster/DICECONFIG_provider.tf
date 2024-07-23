@@ -8,8 +8,13 @@ provider "aws" {
 data "aws_eks_cluster" "this" {
   name = var.cluster.name
 }
+
 data "aws_eks_cluster_auth" "this" {
   name = var.cluster.name
+}
+
+variable "kubeconfig-certificate-authority-data" {
+  type = string
 }
 
 provider "kubernetes" {
