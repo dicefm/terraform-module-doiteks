@@ -177,6 +177,13 @@ resource "kubernetes_deployment" "kube_state_metrics" {
         service_account_name            = kubernetes_service_account.doit_kube_state_metrics[count.index].metadata[0].name
         automount_service_account_token = true
 
+        toleration {
+          effect = "NoSchedule"
+          key = "clusterservices"
+          operator = "Equal"
+          value = "true"
+        }
+        
         container {
           name  = "kube-state-metrics"
           image = var.cluster.kube_state_image
@@ -423,6 +430,13 @@ resource "kubernetes_deployment" "collector" {
       spec {
         restart_policy       = "Always"
         service_account_name = kubernetes_service_account.doit_collector[count.index].metadata[0].name
+
+        toleration {
+          effect = "NoSchedule"
+          key = "clusterservices"
+          operator = "Equal"
+          value = "true"
+        }
 
         container {
           name  = "otelcol"
